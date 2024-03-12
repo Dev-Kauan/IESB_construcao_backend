@@ -1,28 +1,18 @@
-let prompt = require('prompt-sync')();
+//1. Faça um Programa que receba quatro notas de um aluno, calcule e imprima a média aritmética das notas e a mensagem de aprovado para média superior ou igual a 7.0 ou a mensagem de reprovado para média inferior a 7.0.
 
-let nome = prompt("Qual o seu nome?");
+const prompt = require('prompt-sync')();
 
-console.log(`Olá ${nome}, seja bem-vindo`);
+console.log("Exercicio 1");
+console.log("Calcular média");
 
-let idade = Number.parseInt(prompt("Qual a sua idade?"));
+const nota1 = Number(prompt("Digite a nota 1: "));
+const nota2 = Number(prompt("Digite a nota 2: "));
+const nota3 = Number(prompt("Digite a nota 3: "));
+const nota4 = Number(prompt("Digite a nota 4: "));
 
-// console.log(typeof idade);
+let media = (nota1 + nota2 + nota3 + nota4)/4;
 
-if (idade >= 18) {
-    console.log("Você é maior de idade");
-} else {
-    console.log("Você é menor de idade");
-}
+console.log(`Sua média é: ${media.toFixed(2)}`);
 
-let notaProva1 = Number.parseFloat(prompt("Nota prova A1?"));
-let notaprova2 = Number.parseFloat(prompt("Nota prova A2?"));
-
-let media = (notaProva1 + notaprova2) / 2;
-
-if(media >= 6){
-    console.log(`Parabéns ${nome}, você foi aprovado!`);
-    console.log(`Sua média foi ${media}`);
-} else{
-    console.log(`${nome}, infezlimente você foi reprovado!`);
-    console.log(`Sua média foi ${media}`)
-}
+let result = media >= 7 ? "Você foi aprovado" : "Você foi reprovado";
+console.log(result);
