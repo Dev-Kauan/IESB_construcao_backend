@@ -3,8 +3,8 @@
 const prompt = require('prompt-sync')();
 
 const custoFabrica = Number(prompt("Qual o custo de fábrica? "));
-const porcenConcessionaria = Number(prompt("Qual é a porcentagem da concessionária? "));
-const porcenImposto = Number(prompt("Qual a porcentagem do imposto? "));
+const porcenConcessionaria = 28;
+const porcenImposto = 45;
 
 const calculoImposto = custoFabrica * porcenImposto / 100;
 const calculoConcessionaria = custoFabrica * porcenConcessionaria / 100
