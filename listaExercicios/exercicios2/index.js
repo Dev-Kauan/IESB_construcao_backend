@@ -76,10 +76,10 @@ app.post('/ex05/', (req, res) => {
 app.post('/ex06/', (req, res) => {
     const altura = Number(req.query.altura);
     const sexo = req.query.sexo;
-    
+
     let imc = (72.7 * altura) - 58;
     if (sexo == 'Masculino') return res.send(`O peso ideal para homem com a altura informada é: ${imc.toFixed(2)} kilos`);
-    
+
     imc = (62.1 * altura) - 44.7;
     if (sexo == 'Feminino') return res.send(`O peso ideal para mulher com a altura informada é: ${imc.toFixed(2)}`);
 });
@@ -89,18 +89,112 @@ app.post('/ex06/', (req, res) => {
 //• A média aritmética dos preços dos produtos.
 
 app.post('/ex07/', (req, res) => {
-    const array = [req.body.n1, req.body.n2, req.body.n3, req.body.n4, req.body.n5, req.body.n6, req.body.n7, req.body.n8, req.body.n9, req.body.n10, req.body.n11, req.body.n12, req.body.n13, req.body.n14, req.body.n15];
+    const corpo = req.body;
+    let array = [];
 
-    let maior = Math.max.apply(null, array); //Função para descobrir qual elemento do array é o maior
+    corpo.forEach(produto => {
+        array.push(produto)
+    });
 
-    const media = (req.body.n1 + req.body.n2 + req.body.n3 + req.body.n4 + req.body.n5 + req.body.n6 + req.body.n7 + req.body.n8 + req.body.n9 + req.body.n10 + req.body.n11 + req.body.n12 + req.body.n13 + req.body.n14 + req.body.n15)/15;
-    
-    res.send(`Dos números enviados o maior deles é: ${maior}.
-    A média dos números enviados é: ${media}.`);
+    let soma = 0;
+    array.forEach(produto => {
+        soma += produto.preco;
+    })
+
+    const media = soma / array.length;
+
+    let maior = 0;
+    array.forEach(produto => {
+        if(produto.preco > maior){
+            maior = produto.preco;
+        }
+    });
+
+    const resultado = {
+        precoMedio: media.toFixed(2),
+        maiorPreco: maior
+    }
+    res.json(resultado);
 });
 
+//8. Uma empresa concederá um aumento de salário aos seus funcionários, variável de acordo com o cargo, conforme a tabela abaixo. Faça uma api que leia o salário e o código do cargo de um funcionário e calcule o seu novo salário. Se o cargo do funcionário não estiver na tabela, ele deverá receber 15% de aumento. Mostre o salário antigo, o novo salário e a diferença entre ambos.
+//Código do Cargo -> Percentual:
+//• 101 -> 5%
+//• 102 -> 7,5%
+//• 103 -> 10%
+
+app.post('/ex08/', (req, res) => {
+    const nome = req.body.nome;
+    let salario = Number(req.body.salario);
+    const cargo = Number(req.body.cargo);
+
+    if (cargo == 101 || cargo == 102 || cargo == 103) {
+        if (cargo == 101) {
+            let reajuste = salario * 0.05;
+            return res.send(`${nome}, seu salário atual é R$${salario}, seu novo salário será de: R$${salario + reajuste}. Valor aumentado: R$${reajuste}`);
+        } else if (cargo == 102) {
+            reajuste = salario * 0.075;
+            return res.send(`${nome}, seu salário atual é R$${salario}, seu novo salário será de: R$${salario + reajuste}. Valor aumentado: R$${reajuste}`);
+        }
+        reajuste = salario * 0.10;
+        return res.send(`${nome}, seu salário atual é R$${salario}, seu novo salário será de: R$${salario + reajuste}. Valor aumentado: R$${reajuste}`);
+    }
+    reajuste = salario * 0.15;
+    return res.send(`${nome}, seu salário atual é R$${salario}, seu novo salário será de: R$${salario + reajuste}. Valor aumentado: R$${reajuste}`);
+})
 
 
+//9. Faça uma api que receba o valor do salário mínimo, o número de horas trabalhadas, o número de dependentes do funcionário e a quantidade de horas extras trabalhadas. Calcule e imprima o salário a receber do funcionário seguindo as regras abaixo:
+/*
+•  Valor da hora trabalhada é igual a 1/5 do salário mínimo;
+•  Salário do mês é igual ao número de horas trabalhadas vezes o valor da hora trabalhada;
+•  Para cada dependente acréscimo de 32 reais;
+•  Para cada hora extra trabalhada o cálculo do valor da hora trabalhada acrescida de 50 %;
+•  Salário bruto é igual ao salário do mês mais os valores dos dependentes mais os valores das horas extras;
+•  Cálculo do valor do imposto de renda retido na fonte segue a tabela abaixo:
+    IRRF | Salário Bruto
+    Isento Inferior a 2.000
+    10% De 2.000 a 5.000
+    20% Superior a 5.000
+• Salário líquido é igual ao salário bruto menos IRRF;
+• A gratificação segue a próxima tabela:
+      Salário Líquido | Gratificações
+      Até 3.500 | 1.000 reais
+      Superior a 3.500 | 500 reais
+• Salário a receber do funcionário é igual ao salário líquido mais a gratificação.
+*/
+
+app.post('/ex09/', (req, res) => {
+    const nome = req.body.nome;
+    // let salario = 1412;
+    let salario = Number(req.body.salario);
+    const numHorasTrabalhadas = Number(req.body.numHorasTrabalhadas);
+    const numDepedentes = Number(req.body.numDepedentes);
+    const horaExtra = Number(req.body.horaExtra);
+
+    let valorHora = salario / numHorasTrabalhadas;
+    const calcDependente = numDepedentes * 32;
+    const calcHoraExtra = (valorHora += valorHora * 0.50) * horaExtra
+
+    const salarioBruto = salario + calcDependente + calcHoraExtra;
+
+    res.send(`${nome}, seu salário bruto: R$${salarioBruto.toFixed(2)}`);
+
+    if(salarioBruto >= 2000 && salarioBruto <= 5000){
+        let imposto = salarioBruto * 0.10;
+        return res.send(`${nome}, você recebe: R$${salarioBruto}. 
+        Irá pagar R$${imposto} de imposto.`);
+    }else if(salarioBruto > 5000){
+        imposto = salarioBruto * 0.50;
+        return res.send(`${nome}, você recebe: R$${salarioBruto}. 
+        Irá pagar R$${imposto} de imposto.`);
+    }
+
+    if(salarioBruto < 3500)
+    let salarioLiquido = salarioBruto;
+    return res.send(`${nome}, você recebe: R$${salarioBruto}, então está isento do imposto`);
+    
+})
 app.listen(3000, () => {
     console.log(`Api iniciada! Rodando em http://localhost:3000`);
 });
