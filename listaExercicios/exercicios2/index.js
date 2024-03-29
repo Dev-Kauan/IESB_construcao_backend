@@ -105,7 +105,7 @@ app.post('/ex07/', (req, res) => {
 
     let maior = 0;
     array.forEach(produto => {
-        if(produto.preco > maior){
+        if (produto.preco > maior) {
             maior = produto.preco;
         }
     });
@@ -177,23 +177,31 @@ app.post('/ex09/', (req, res) => {
     const calcHoraExtra = (valorHora += valorHora * 0.50) * horaExtra
 
     const salarioBruto = salario + calcDependente + calcHoraExtra;
-
-    res.send(`${nome}, seu salário bruto: R$${salarioBruto.toFixed(2)}`);
-
-    if(salarioBruto >= 2000 && salarioBruto <= 5000){
-        let imposto = salarioBruto * 0.10;
-        return res.send(`${nome}, você recebe: R$${salarioBruto}. 
-        Irá pagar R$${imposto} de imposto.`);
-    }else if(salarioBruto > 5000){
+    let imposto;
+    if (salarioBruto >= 2000 && salarioBruto <= 5000) {
+        imposto = salarioBruto * 0.10;
+    } else if (salarioBruto > 5000) {
         imposto = salarioBruto * 0.50;
-        return res.send(`${nome}, você recebe: R$${salarioBruto}. 
-        Irá pagar R$${imposto} de imposto.`);
+    } else {
+        res.send(`${nome}, seu salário bruto: R$${salarioBruto.toFixed(2)}.
+        Você esta isento de imposto.
+        Seu salário final com todos os descontos e acrescimos ficará: ${salarioLiquido.toFixed(2)}`);
     }
 
-    if(salarioBruto < 3500)
-    let salarioLiquido = salarioBruto;
-    return res.send(`${nome}, você recebe: R$${salarioBruto}, então está isento do imposto`);
-    
+    // let salarioLiquido = 0;
+    //CALCULO DO SALÁRIO LIQUIDO
+    if (salarioBruto < 3500) {
+        let salarioLiquido = salarioBruto - imposto + 1000;
+    } else {
+        salarioLiquido = salarioBruto - imposto + 500;
+    }
+
+    res.send(`${nome}, seu salário bruto: R$${salarioBruto.toFixed(2)}.
+    Você vai pagar R$${imposto.toFixed(2)} de imposto.
+    Seu salário final com todos os descontos e acrescimos ficará: ${salarioLiquido.toFixed(2)}`);
+
+
+
 })
 app.listen(3000, () => {
     console.log(`Api iniciada! Rodando em http://localhost:3000`);
