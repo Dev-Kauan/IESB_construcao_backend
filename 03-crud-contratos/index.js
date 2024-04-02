@@ -1,14 +1,17 @@
 //configuração
 const express = require('express');
 const app = express();
-
+const cors = require('cors');
 const tutorial = require('./routes/tutorial');
 const subrota = require('./routes/subrota');
-const contatos = require('./routes/contatos')
+const contatos = require('./routes/contatos');
 
 // middlewares
 // middlewares que transforma o corpo da requisição em objeto json dentro de uma aplicação
 app.use(express.json());
+
+//Configuração do cors
+app.use(cors({origin: '*'}));
 
 // trazendo as rotas do modulo tutorial pra dentro da minha aplicação
 app.use(tutorial);
@@ -20,8 +23,8 @@ app.use(contatos);
 // contrato -> configuração das rotas e da lógica
 app.get("/", (req, res) => {
     res.send("Aplicação rodando!!!");
-})
+});
 
 app.listen(3000, () => {
     console.log("API iniciada com sucesso!");
-})
+});

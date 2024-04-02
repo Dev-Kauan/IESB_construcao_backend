@@ -5,7 +5,7 @@ const router = express.Router()
 
 // dados mockados
 // criar uma lista
-let listaContatos = ["João", "Pedro", "Daniel"];
+let listaContatos = [];
 
 //CRUD
 // CREATE -> CADASTRAR UM CONTATO
@@ -21,8 +21,8 @@ router.get('/contatos', (req, res) => {
 
 // READ -> BUSCA DO CONTATO PELO IDENTIFICADOR
 router.get('/contatos/:id', (req, res) => {
-    const posicao = Number(req.params.id);
-    res.send(listaContatos[posicao]);
+    const id = req.params.id;
+    res.json(listaContatos[id]);
 });
 
 // UPDATE -> ATUALIZAR CONTATO
