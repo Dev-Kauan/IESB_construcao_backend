@@ -58,9 +58,19 @@ router.get('/produtos/:id', validarProduto, (req, res) => {
 
 // UPDATE -> Alterar um produto
 router.put('/produtos/:id', validarAtributos, validarProduto, (req, res) => {
+    const id = req.params.id
+    const novosDados = req.body
+
+    const index = listaProdutos.findIndex(produto => produto.id == id)
+    
+    const produto = {
+        id: Number(id),
+        nome: novosDados.nome,
+        preco: novosDados.preco
+    }
 
     listaProdutos[index] = produto
-    
+
     res.status(200).json(
         {
             mensagem: "Produto alterado com sucesso!",
