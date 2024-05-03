@@ -22,27 +22,32 @@ app.get('/', (req, res) => {
     res.json("Hello");
 });
 
+// buscar todas as tarefas
 app.get('/tarefas', async (req, res) => {
     const tarefas = await Tarefa.find();
     res.json(tarefas);
 })
 
+// buscar tarefa por id
 app.get('/tarefas/:id', async (req, res) => {
     const tarefa = await Tarefa.findById(req.params.id);
     res.json(tarefa);
 })
 
+// Criar uma tarefa
 app.post('/tarefas', async (req, res) => {
     const tarefa = new Tarefa({nome: req.body.nome})
     await tarefa.save();
     res.json(tarefa);
 })
 
+// Alterar uma tarefa
 app.put('/tarefas/:id', async (req, res) => {
     const tarefa = await Tarefa.findByIdAndUpdate(req.params.id, {nome: req.body.nome}, {new: true});
     res.json(tarefa);
 })
 
+// Deletar uma tarefa
 app.delete('/tarefas/:id', async (req, res) => {
     res.json(`item deletado com sucesso!`)
     await Tarefa.findByIdAndDelete(req.params.id, {new:true});
