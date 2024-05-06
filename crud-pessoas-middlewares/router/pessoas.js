@@ -35,6 +35,8 @@ function validarPessoa(req, res, next) {
 function validarAtributos(req, res, next) {
     if(!req.body.nome && !req.body.idade && !req.body.email && !req.body.telefone){
         return res.status(400).json("Você não ofereceu dados suficientes!");
+    } else {
+        next();
     }
 }
 

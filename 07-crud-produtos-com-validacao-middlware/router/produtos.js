@@ -29,7 +29,7 @@ function validarAtributos(req, res, next) {
     if (!dadosRecebidos.nome || !dadosRecebidos.preco) {
         return res.status(400).json("Você não forneceu dados suficientes para o cadastro!");
     } else {
-        next()
+        next();
     }
 }
 
