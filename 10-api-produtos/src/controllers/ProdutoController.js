@@ -13,7 +13,7 @@ async function create(req, res) {
             mensagem: `Produto ${produtoCriado.nome} criado com sucesso!`,
             produtoCriado
         })
-    }catch (error) {
+    } catch (error) {
         console.log(error)
         res.status(500).json(
             {
@@ -24,8 +24,15 @@ async function create(req, res) {
     }
 }
 
-async function update(req, res){
-    const produtos = await Produto.findByIdAndUpdate();
+async function update(req, res) {
+    const produtos = await Produto.findByIdAndUpdate(req.params.id,
+        {
+            nome: req.body.nome,
+            preco: Number(req.body.preco),
+            tipo: req.body.preco,
+            tag: req.body.tag
+        }
+    );
 }
 
 module.exports = {
