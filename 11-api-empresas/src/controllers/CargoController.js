@@ -2,18 +2,9 @@ const Cargo = require('../models/Cargo');
 
 // methods
 async function create(req, res) {
-    try {
-        const cargo = new Cargo(req.body)
-        const cargoCriado = await cargo.save()
-
-        res.status(201).json(cargoCriado);
-    } catch (error) {
-        console.error("Erro ao criar cargo: ", error)
-        res.status(400).json({
-            mensagem: "Erro ao criar cargo!",
-            erro: error.messager
-        })
-    }
+    const cargo = new Cargo(req.body)
+    const cargoCriado = await cargo.save()
+    res.status(201).json(cargoCriado);
 }
 
 async function getAll(req, res) {
@@ -30,23 +21,23 @@ async function getById(req, res) {
 }
 
 async function update(req, res) {
-    try {
-        const cargoAtualizado = await Cargo.findByIdAndUpdate(req.params.id, req.body)
+    const cargoAtualizado = await Cargo.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    if (cargoAtualizado) {
         res.json(cargoAtualizado)
-    } catch (error) {
-        console.error("Erro ao criar cargo: ", error)
-        res.status(400).json({
-            mensagem: "Erro ao atualizar",
-            erro: error
-        })
+    } else {
+        res.status(404).json({ mensagem: "Cargo não encontrado!" })
     }
+
 }
 
 async function remove(req, res) {
-    await Cargo.findByIdAndDelete(req.params.id);
-    res.json({
-        mensagem:"Excluído com sucesso!"
-    })
+    const cargoExcluido = await Cargo.findByIdAndDelete(req.params.id);
+    if (cargoExcluido) {
+        res.json({mensagem: "Excluído com sucesso!"})
+    } else {
+        res.status(404).json({ mensagem: "Cargo não encontrado!" })
+    }
+
 }
 
 module.exports = {
