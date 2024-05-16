@@ -25,17 +25,36 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-    const produtos = await Produto.findByIdAndUpdate(req.params.id,
-        {
-            nome: req.body.nome,
-            preco: Number(req.body.preco),
-            tipo: req.body.preco,
-            tag: req.body.tag
-        }
-    );
+    const produtoAtualizado = await Produto.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    if (produtoAtualizado) {
+        res.json(produtoAtualizado)
+    } else {
+        res.status(404).json({ mensagem: "Produto não encontrado!" })
+    }
 }
 
+async function getById(req, res) {
+    const produto = await Produto.findById(req.params.id)
+    if (produto) {
+        res.json(produto)
+    } else {
+        res.status(404).json({ mensagem: "Produto não encontrado!" })
+    }
+}
+
+async function remove(req, res) {
+    const produtoExcluido = await Produto.findByIdAndDelete(req.params.id);
+    if (produtoExcluido) {
+        res.json({mensagem: "Excluído com sucesso!"})
+    } else {
+        res.status(404).json({ mensagem: "Produto não encontrado!" })
+    }
+
+}
 module.exports = {
     getAll,
-    create
+    create,
+    update,
+    getById,
+    remove
 }
