@@ -27,8 +27,18 @@ async function getById(req, res){
     }
 }
 
+async function update(req, res) {
+    const funcionarioAtualizado = await Funcionario.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    if (funcionarioAtualizado) {
+        res.json(funcionarioAtualizado)
+    } else {
+        res.status(404).json({ mensagem: "Funcionário não encontrado!" })
+    }
+}
+
 module.exports = {
     create,
     getById,
-    getAll
+    getAll,
+    update
 }
