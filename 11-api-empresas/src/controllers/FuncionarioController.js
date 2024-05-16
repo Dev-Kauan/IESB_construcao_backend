@@ -36,9 +36,19 @@ async function update(req, res) {
     }
 }
 
+async function deletar(req, res) {
+    const funcionarioExcluido = await Funcionario.findByIdAndDelete(req.params.id);
+    if (funcionarioExcluido) {
+        res.json({mensagem: "Excluído com sucesso!"})
+    } else {
+        res.status(404).json({ mensagem: "Funcionário não encontrado!" })
+    }
+}
+
 module.exports = {
     create,
     getById,
     getAll,
-    update
+    update,
+    deletar
 }
