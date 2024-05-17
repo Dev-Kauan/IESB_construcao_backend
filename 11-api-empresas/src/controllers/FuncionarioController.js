@@ -1,26 +1,18 @@
 const Funcionario = require('../models/Funcionario');
 
 async function create(req, res) {
-    try {
-        const funcionario = new Funcionario(req.body)
-        const funcionarioCriado = await funcionario.save()
-        res.status(201).json(funcionarioCriado);
-    } catch (error) {
-        console.error("Erro ao criar funcionário: ", error)
-        res.status(400).json({
-            mensagem: "Erro ao criar funcionário!",
-            erro: error.messager
-        })
-    }
+    const funcionario = new Funcionario(req.body)
+    const funcionarioCriado = await funcionario.save()
+    res.status(201).json(funcionarioCriado);
 }
 
 async function getAll(req, res) {
-    res.json(await Funcionario.find())
+    res.json(await Funcionario.find().populate(['cargo_id', 'departamento_id']));
 }
 
-async function getById(req, res){
-    const funcionario = await Funcionario.findById(req.params.id).populate('cargo')
-    if(funcionario){
+async function getById(req, res) {
+    const funcionario = await Funcionario.findById(req.params.id).populate(['cargo_id', 'departamento_id'])
+    if (funcionario) {
         res.json(funcionario);
     } else {
         res.status(404).json("Funcionário não encontrado!");
@@ -28,7 +20,7 @@ async function getById(req, res){
 }
 
 async function update(req, res) {
-    const funcionarioAtualizado = await Funcionario.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    const funcionarioAtualizado = await Funcionario.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (funcionarioAtualizado) {
         res.json(funcionarioAtualizado)
     } else {
@@ -39,7 +31,7 @@ async function update(req, res) {
 async function deletar(req, res) {
     const funcionarioExcluido = await Funcionario.findByIdAndDelete(req.params.id);
     if (funcionarioExcluido) {
-        res.json({mensagem: "Excluído com sucesso!"})
+        res.json({ mensagem: "Excluído com sucesso!" })
     } else {
         res.status(404).json({ mensagem: "Funcionário não encontrado!" })
     }

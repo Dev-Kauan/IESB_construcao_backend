@@ -8,7 +8,8 @@ const DepartamentoController = require('../controllers/DepartamentoController');
 
 //Importando o validador
 const { cargoValidador } = require('../validators/cargoValidator');
-const { departamentoValidador } = require('../validators/departamentoValidator')
+const { departamentoValidador } = require('../validators/departamentoValidator');
+const { funcionarioValidador } = require('../validators/funcionarioValidator');
 const { validarId } = require('../validators/idValidator');
 
 //Cargos
@@ -19,10 +20,10 @@ router.put('/cargos/:id', validarId, cargoValidador, CargoController.update);
 router.delete('/cargos/:id', validarId, CargoController.remove);
 
 // rota de Funcionario
-router.post('/funcionarios', FuncionarioController.create)
+router.post('/funcionarios',funcionarioValidador, FuncionarioController.create)
 router.get('/funcionarios', FuncionarioController.getAll);
 router.get('/funcionarios/:id', validarId, FuncionarioController.getById)
-router.put('/funcionarios/:id', validarId, FuncionarioController.update)
+router.put('/funcionarios/:id', validarId, funcionarioValidador, FuncionarioController.update)
 router.delete('/funcionarios/:id', validarId, FuncionarioController.deletar)
 
 //Departamento
