@@ -6,11 +6,13 @@ const CargoController = require('../controllers/CargoController');
 const FuncionarioController = require('../controllers/FuncionarioController');
 const DepartamentoController = require('../controllers/DepartamentoController');
 const TarefaController = require('../controllers/TarefaController');
+const ProjetoController = require('../controllers/ProjetoController');
 //Importando o validador
 const { cargoValidador } = require('../validators/cargoValidator');
 const { departamentoValidador } = require('../validators/departamentoValidator');
 const { funcionarioValidador } = require('../validators/funcionarioValidator');
 const { tarefaValidador } = require('../validators/tarefaValidator')
+const { projetoValidador } = require('../validators/projetoValidator')
 const { validarId } = require('../validators/idValidator');
 
 //Cargos
@@ -42,5 +44,13 @@ router.get('/tarefas', TarefaController.getAll);
 router.get('/tarefas/:id', validarId, TarefaController.getById)
 router.put('/tarefas/:id', validarId, tarefaValidador, TarefaController.update)
 router.delete('/tarefas/:id', validarId, TarefaController.remove)
+
+//Projeto
+//rota de projeto
+router.post('/projetos', projetoValidador, ProjetoController.create)
+router.get('/projetos', ProjetoController.getAll);
+router.get('/projetos/:id', validarId, ProjetoController.getById)
+router.put('/projetos/:id', validarId, projetoValidador, ProjetoController.update)
+router.delete('/projetos/:id', validarId, ProjetoController.remove)
 
 module.exports = router;
