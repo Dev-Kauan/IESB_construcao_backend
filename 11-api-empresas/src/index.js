@@ -4,8 +4,12 @@ const app = express();
 app.use(express.json());
 
 //importando rotas
+const autenticacaoRoutes = require('./routes/autenticacao.routes');
+app.use(autenticacaoRoutes);
 const router = require('./routes/routes');
-app.use(router);
+const {checarToken} = require('./validators/AutenticacaoValidator')
+app.use("/", checarToken, router);
+
 const db = require('./db/connection');
 db()
 
